@@ -112,3 +112,9 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# Local recovery scenes and recordings
+/Assets/_Recovery/
+/Assets/_Recovery.meta
+*.mp4
+*.webm

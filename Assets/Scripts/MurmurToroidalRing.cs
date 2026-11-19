@@ -20,6 +20,7 @@ public sealed class MurmurToroidalRing : MonoBehaviour
     private Vector3 grabDelta;
     private float capturedRadius;
     private readonly List<RaycastResult> uiHits = new List<RaycastResult>();
+    public bool InteractionLocked { get; set; }
     public bool IsDragging { get; private set; }
 
     private void OnEnable()
@@ -31,7 +32,7 @@ public sealed class MurmurToroidalRing : MonoBehaviour
 
     public bool BeginGrab(Vector2 screenPosition)
     {
-        if (!interactionCamera) return false;
+        if (InteractionLocked || !interactionCamera) return false;
         if (EventSystem.current != null)
         {
             uiHits.Clear();
@@ -76,7 +77,7 @@ public sealed class MurmurToroidalRing : MonoBehaviour
     private void Update()
     {
         var mouse = Mouse.current;
-        if (mouse == null || !Application.isFocused) Release();
+        if (InteractionLocked || mouse == null || !Application.isFocused) Release();
         else
         {
             var point = mouse.position.ReadValue();

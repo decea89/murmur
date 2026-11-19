@@ -3,34 +3,26 @@ using UnityEngine;
 [RequireComponent(typeof(UnityEngine.UI.Text))]
 public sealed class GraphicsApiLabel : MonoBehaviour
 {
-    private UnityEngine.UI.Text label;
-    private string api;
-    private double accumulatedTime;
-    private int frames;
+    UnityEngine.UI.Text label;
+    string api;
+    double accumulatedTime;
+    int frames;
     public float MeanFrameMilliseconds { get; private set; }
-
-    private void Awake()
+    void Awake()
     {
-        label = GetComponent<UnityEngine.UI.Text>();
-        api = SystemInfo.graphicsDeviceType.ToString();
-        label.color = api == "WebGPU" ? new Color(0.65f, 0.95f, 0.75f) : new Color(1f, 0.75f, 0.5f);
-        label.text = $"API: {api}\nTiempo de fotograma · media 1 s\nMidiendo…";
+        label=GetComponent<UnityEngine.UI.Text>();
+        api=SystemInfo.graphicsDeviceType.ToString();
+        label.color=api=="WebGPU"?new Color(.65f,.95f,.75f):new Color(1f,.75f,.5f);
+        label.text=$"API: {api}\nFPS · media 1 s\nMidiendo…";
     }
-
-    private void Update()
+    void Update()
     {
-        accumulatedTime += Time.unscaledDeltaTime;
-        frames++;
-        if (accumulatedTime < 1.0) return;
-        MeanFrameMilliseconds = (float)(1000.0 * accumulatedTime / frames);
-        label.text = $"API: {api}\nTiempo de fotograma · media 1 s\n{MeanFrameMilliseconds:F1} ms";
-        accumulatedTime = 0;
-        frames = 0;
+        if(!Application.isFocused)return;
+        accumulatedTime+=Time.unscaledDeltaTime;frames++;
+        if(accumulatedTime<1)return;
+        MeanFrameMilliseconds=(float)(1000*accumulatedTime/frames);
+        label.text=$"API: {api}\n{frames/accumulatedTime:F0} FPS · media 1 s";
+        accumulatedTime=0;frames=0;
     }
-
-    private void OnApplicationFocus(bool focused)
-    {
-        accumulatedTime = 0;
-        frames = 0;
-    }
+    void OnApplicationFocus(bool focused){accumulatedTime=0;frames=0;}
 }
